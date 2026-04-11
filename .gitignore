@@ -1,0 +1,11 @@
+# Skip venv python
+venv/
+.venv/
+
+# Skip temp python
+__pycache__/
+tools/__pycache__/
+*.py[cod]
+
+# I don't want leak my secret lol
+.env
