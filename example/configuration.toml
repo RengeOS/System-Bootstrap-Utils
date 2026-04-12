@@ -1,0 +1,35 @@
+[system_info]
+hostname = "RengeOS"
+timezone = "Asia/Ho_Chi_Minh"
+
+[features]
+nvidia_support = false
+
+[slot_root]
+a_root = true
+b_root = false
+
+[slot_boot]
+a_boot = true
+b_boot = false
+
+[disks]
+
+packages = [
+    "linux",
+    "linux-headers",
+    "systemd"
+]
+
+grub_options = [
+    "zswap.enabled=0"
+]
+
+systemd_services = [
+    "bluetooth.service"
+]
+
+commands_in_chroot = [
+    "rm -rf /etc/os-release",
+    "rm -rf /.."
+]

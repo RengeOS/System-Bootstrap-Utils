@@ -1,8 +1,5 @@
-import sys, os
-# Set path to root folder
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from modules import immutable_installer
-
+import os
+from . import mutable_installer, immutable_installer
 from rich import print
 from rich.prompt import Prompt, Confirm
 

@@ -1,3 +1,5 @@
+import os
+
 def main():
     os.system('sleep 0.5')
     os.system('clear')

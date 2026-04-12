@@ -5,12 +5,14 @@ from rich.prompt import Prompt, Confirm
 
 def main():
     os.system('clear')
-    print("[bold green]Welcome to Immutable RengeOS Tools![/bold green]")
+    print("[bold green]Welcome to System-Bootstrap RengeOS Tools![/bold green]")
     print("[bold cyan]Select your options:[/bold cyan]")
-    print("1. Start installer")
-    print("2. Build a new slot")
-    print("3. Exit")
-    choice = Prompt.ask("Select", choices=["1", "2", "3"])
+    print("1. [blue bold]Start[/blue bold] installer ([yellow]For Live ISO![/yellow])")
+    print("2. [blue bold]Build[/blue bold] a new slot ([yellow]For Immutable OS![/yellow])")
+    print("3. [blue bold]Reinstall[/blue bold] without usb ([yellow]For Mutable OS![/yellow])")
+    print("4, [blue bold]Update[/blue bold] airootfs and kernels ([yellow]For Mutable OS![/yellow])")
+    print("5. [red bold]Exit[/red bold]")
+    choice = Prompt.ask("Select", choices=["1", "2", "3", "4", "5"])
 
     if choice == "1":
         confirm = Confirm.ask("Are you sure to run installer?")
@@ -36,6 +38,14 @@ def main():
             print("[yellow]Cancelled[/yellow]")
 
     elif choice == "3":
+        print("Have a good day!")
+        return 0
+
+    elif choice == "4":
+        print("Have a good day!")
+        return 0
+        
+    elif choice == "5":
         print("Have a good day!")
         return 0
 
