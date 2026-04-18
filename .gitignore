@@ -2,6 +2,10 @@
 venv/
 .venv/
 
+# Skip build dir
+dist/
+build/
+
 # Skip temp python
 __pycache__/
 tools/__pycache__/
