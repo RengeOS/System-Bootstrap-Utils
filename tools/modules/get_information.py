@@ -4,11 +4,11 @@ import subprocess
 def get_boot_mode_information():
     if os.path.exists("/sys/firmware/efi/efivars"):
         boot_mode = "UEFI"
-        boot_filesystem = ["vfat, ""xfs", "ext4", "btrfs"]
+        boot_filesystem_supported = ["vfat, ""xfs", "ext4", "btrfs"]
     else:
-        boot_mode = ["LEGACY", "xfs"]
-        boot_filesystem = ["xfs", "ext4", "btrfs"]
-    return boot_mode, boot_filesystem
+        boot_mode = "LEGACY"
+        boot_filesystem_supported = ["xfs", "ext4", "btrfs"]
+    return boot_mode, boot_filesystem_supported
 
 def get_cpu_information():
     cpu_result = subprocess.run(["lscpu | grep 'Model name' | cut -d ':' -f2 | xargs"],

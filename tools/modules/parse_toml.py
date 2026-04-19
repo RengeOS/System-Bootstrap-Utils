@@ -30,5 +30,3 @@ def validate_configuration(path):
         return 0
 
     return data
-
-data_configuration = validate_configuration(path_configuration)
