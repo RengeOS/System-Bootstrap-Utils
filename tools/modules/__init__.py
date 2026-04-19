@@ -12,3 +12,7 @@ from . import configuration_config
 from . import nvidia
 from . import waydroid
 from . import flatpak
+from . import bluetooth
+from . import power_management
+from . import profile
+from . import audio

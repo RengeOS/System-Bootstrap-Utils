@@ -2,7 +2,7 @@ from . import configuration_config
 import os
 
 # List supported virtual ram
-_virtual_ram_list = ["Swap", "Swap to file", "Zswap", "Zram", "Disabled"]
+_virtual_ram_list = ["Disabled", "Swap", "Swap to file", "Zswap", "Zram"]
 
 
 def choose_virtual_ram_options():

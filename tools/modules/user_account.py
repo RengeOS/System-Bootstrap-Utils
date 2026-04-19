@@ -16,7 +16,7 @@ _user_account_group = [
 
 def add_user():
     os.system("clear")
-    users = configuration_config._config.setdefault("user_accounts", {})
+    users = configuration_config._config.setdefault("user_account", {})
 
     print("\n-*- Add User -*-")
 
@@ -47,7 +47,6 @@ def add_user():
     print("\nAvailable groups:")
     print(" ".join(_user_account_group))
     raw = input("Groups (space separated): ").strip()
-    print("Example: wheel audio ...")
     groups = []
     invalid_groups = []
     if raw:
@@ -68,7 +67,7 @@ def add_user():
     print(f"\nUser '{username}' added successfully!")
 
 def user_account_status():
-    users = configuration_config._config.get("user_accounts", {})
+    users = configuration_config._config.get("user_account", {})
 
     if not users:
         return "User accounts: Not set"
@@ -98,7 +97,7 @@ def user_account_status():
 
 def configure_user():
     os.system("clear")
-    users = configuration_config._config.get("user_accounts", {})
+    users = configuration_config._config.get("user_account", {})
 
     if not users:
         print("No users available!")
@@ -167,7 +166,6 @@ def configure_user():
                 print("\nAvailable groups:")
                 print(" ".join(_user_account_group))
                 raw = input("Enter groups (space separated): ").strip()
-                print("Example: wheel audio ...")
                 groups = []
                 invalid = []
                 if raw:

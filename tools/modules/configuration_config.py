@@ -4,12 +4,15 @@ _config = {
     "hostname": "Not set",
     "timezone": "Not set",
     "system_locale": "Not set",
-    "desktop": {},
+    "profile": "Not set",
+    "audio": "Not set",
+    "kernel": "Not set",
     "disk": {
         "method": "Not set",
+        "encryption": "Not set",
     },
     "root_password": "Not set",
-    "user_accounts": {
+    "user_account": {
         # How it will look like after configuration:
         # "name_user": {
         #     "password": "abcxyz",
@@ -21,5 +24,7 @@ _config = {
         "nvidia": "Not set",
         "waydroid": "Not set",
         "flatpak": "Not set",
+        "bluetooth": "Not set",
+        "power_management": "Not set",
     },
 }
