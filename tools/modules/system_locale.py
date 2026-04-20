@@ -1,4 +1,4 @@
-from . import drawer, configuration_config
+from . import drawer, immutable_os_config
 from tools import immutable_installer
 
 def set_locale():
@@ -34,7 +34,7 @@ def set_locale():
 
     # Handle selection
     def select_locale(loc):
-        configuration_config._config.update({"system_locale": loc})
+        immutable_os_config._config["system"].update({"system_locale": loc})
         drawer._pop()
 
     # Build menu

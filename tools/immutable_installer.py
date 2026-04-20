@@ -4,7 +4,7 @@ from getpass import getpass
 import subprocess
 from .modules import (
 get_information, drawer, system_locale, hostname, timezone, root_password,
-user_account, virtual_ram, configuration_config, nvidia, waydroid,
+user_account, virtual_ram, immutable_os_config, nvidia, waydroid,
 flatpak, disk, bluetooth, power_management, profile, audio
 )
 from rich import print
@@ -37,27 +37,27 @@ def main():
     menu = [
         {
             "label":     "Hostname",
-            "info":      lambda: f"Current hostname: {configuration_config._config['hostname']}\n\nPress ENTER to change.",
+            "info":      lambda: f"Current hostname: {immutable_os_config._config["system"]["hostname"]}\n\nPress ENTER to change.",
             "on_select": hostname.set_hostname,
             "children":  [],
         },
         {
             "label":     "Timezone and System Locale",
-            "info":      lambda: f"""Current timezone: {configuration_config._config['timezone']}
-                                     Current system locale: {configuration_config._config['system_locale']}
+            "info":      lambda: f"""Current timezone: {immutable_os_config._config["system"]['timezone']}
+                                     Current system locale: {immutable_os_config._config["system"]["system_locale"]}
                                   
                                   Press Enter to configuration the timezone and system locale.""",
             "on_select": None,
             "children": [
                         {
                             "label":     "Timezone",
-                            "info":      lambda: f"Current timezone: {configuration_config._config['timezone']}\n\nPress ENTER to change timezone.",
+                            "info":      lambda: f"Current timezone: {immutable_os_config._config["system"]["timezone"]}\n\nPress ENTER to change timezone.",
                             "on_select": timezone.set_timezone,
                             "children":  [],
                         },
                         {
                             "label":     "System Locale",
-                            "info":      lambda: f"Current system locale: {configuration_config._config['system_locale']}\n\nPress ENTER to change system locale.",
+                            "info":      lambda: f"Current system locale: {immutable_os_config._config["system"]["system_locale"]}\n\nPress ENTER to change system locale.",
                             "on_select": system_locale.set_locale,
                             "children":  [],
                         },
@@ -65,20 +65,83 @@ def main():
         },
         {
             "label":     "Disk",
-            "info":      lambda: f"""Current disk method: {configuration_config._config['disk']['method']}
+            "info":      lambda: f"""Press Enter to configuration disk.
+            
+                                     Partitions status:
 
-                                  Press Enter to configuration disk.
+                                     + EFI partition: {immutable_os_config._config["disk"]["layout"]["efi_partition"]}
+                                     + Data partition: {immutable_os_config._config["disk"]["layout"]["data_partition"]}
+                                     + Repair partition: {immutable_os_config._config["disk"]["layout"]["repair_partition"]}
+                                     + Boot_A partition: {immutable_os_config._config["disk"]["layout"]["boot_a_partition"]}
+                                     + Boot_B partition: {immutable_os_config._config["disk"]["layout"]["boot_b_partition"]}
+                                     + Root_A partition: {immutable_os_config._config["disk"]["layout"]["root_a_partition"]}
+                                     + Root_B partition: {immutable_os_config._config["disk"]["layout"]["root_b_partition"]}
+                                     + Swap partition: {immutable_os_config._config["disk"]["layout"]["swap_partition"]}
 
-                                  Disk info:
-                                  {disk.show_disk_info()}""",
+                                     Disk info:
+
+                                     {disk.show_disk_info()}""",
             "on_select": None,
             "children":  [
                         {
-                            "label":     "Choose disk method",
-                            "info":      lambda: f"Current disk method: {configuration_config._config['disk']['method']}\n\nPress ENTER to change.",
-                            "on_select": disk.choose_disk_method,
+                            "label":     "Configuration disk",
+                            "info":      lambda: f"""Press Enter to configuration disk.
+
+                                                  Disk info:
+
+                                                  {disk.show_disk_info()}""",
+                            "on_select": disk.configuration_disk,
                             "children":  [],
                         },
+                        {
+                            "label":     "EFI partition",
+                            "info":      lambda: f"Current EFI partition: {immutable_os_config._config["disk"]["layout"]["efi_partition"]}\n\nPress ENTER to change efi partition.",
+                            "on_select": disk.choose_efi_partition,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Data partition",
+                            "info":      lambda: f"Current Data partition: {immutable_os_config._config["disk"]["layout"]["data_partition"]}\n\nPress ENTER to change data partition.",
+                            "on_select": disk.choose_data_partition,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Repair partition",
+                            "info":      lambda: f"Current Repair partition: {immutable_os_config._config["disk"]["layout"]["repair_partition"]}\n\nPress ENTER to change repair partition.",
+                            "on_select": disk.choose_repair_partition,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Boot_A partition",
+                            "info":      lambda: f"Current Boot_A partition: {immutable_os_config._config["disk"]["layout"]["boot_a_partition"]}\n\nPress ENTER to change boot_a partition.",
+                            "on_select": system_locale.set_locale,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Boot_B partition",
+                            "info":      lambda: f"Current Boot_B partition: {immutable_os_config._config["disk"]["layout"]["boot_b_partition"]}\n\nPress ENTER to change boot_b partition.",
+                            "on_select": system_locale.set_locale,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Root_A partition",
+                            "info":      lambda: f"Current Root_A partition: {immutable_os_config._config["disk"]["layout"]["root_a_partition"]}\n\nPress ENTER to change root_a partition.",
+                            "on_select": system_locale.set_locale,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Root_B partition",
+                            "info":      lambda: f"Current Root_B partition: {immutable_os_config._config["disk"]["layout"]["root_b_partition"]}\n\nPress ENTER to change root_b partition.",
+                            "on_select": system_locale.set_locale,
+                            "children":  [],
+                        },
+                        {
+                            "label":     "Swap partition",
+                            "info":      lambda: f"Current Swap partition: {immutable_os_config._config["disk"]["layout"]["swap_partition"]}\n\nPress ENTER to change swap partition.",
+                            "on_select": system_locale.set_locale,
+                            "children":  [],
+                        },
+
             ],
         },
         {
@@ -102,67 +165,67 @@ def main():
         },
         {
             "label":     "Root password",
-            "info":      lambda: f"Root password status: " f"{'Already set' if configuration_config._config['root_password'] != 'Not set' else 'Not set'}\n\n""Press ENTER to change root password.",
+            "info":      lambda: f"Root password hash: " f"{immutable_os_config._config["accounts"]["root"]["password"]}\n\n""Press ENTER to change root password.",
             "on_select": root_password.set_root_password,
             "children":  [],
         },
         {
             "label":     "Profile",
-            "info":      lambda: f"Current profile: {configuration_config._config['profile']}\n\n""Press ENTER to change profile.",
+            "info":      lambda: f"Current profile: {immutable_os_config._config["system"]["profile"]}\n\n""Press ENTER to change profile.",
             "on_select": profile.choose_profile_options,
             "children":  [],
         },
         {
             "label":     "Audio",
-            "info":      lambda: f"Current audio: {configuration_config._config['audio']}\n\nPress Enter to change audio.",
+            "info":      lambda: f"Current audio: {immutable_os_config._config["system"]["audio"]}\n\nPress Enter to change audio.",
             "on_select": audio.choose_audio_options,
             "children":  [],
         },
         {
             "label":     "Features",
-            "info":      lambda: f"""Current virtual ram: {configuration_config._config['features']['virtual_ram']}
-                                     Current nvidia status: {configuration_config._config['features']['nvidia']}
-                                     Current waydroid status: {configuration_config._config['features']['waydroid']}
-                                     Current flatpak status: {configuration_config._config['features']['flatpak']}
-                                     Current bluetooth status: {configuration_config._config['features']['bluetooth']}
-                                     Current power management: {configuration_config._config['features']['power_management']}
+            "info":      lambda: f"""Current virtual ram: {immutable_os_config._config['features']['virtual_ram']}
+                                     Current nvidia status: {immutable_os_config._config['features']['nvidia']}
+                                     Current waydroid status: {immutable_os_config._config['features']['waydroid']}
+                                     Current flatpak status: {immutable_os_config._config['features']['flatpak']}
+                                     Current bluetooth status: {immutable_os_config._config['features']['bluetooth']}
+                                     Current power management: {immutable_os_config._config['features']['power_management']}
 
                                      Press ENTER to configure the features.""",
             "on_select": None,
             "children":  [
                         {
                             "label":     "Configuration virtual ram",
-                            "info":      lambda: f"Current virtual ram option: {configuration_config._config['features']['virtual_ram']}\n\nPress Enter to configuration virtual ram.",
+                            "info":      lambda: f"Current virtual ram option: {immutable_os_config._config['features']['virtual_ram']}\n\nPress Enter to configuration virtual ram.",
                             "on_select": virtual_ram.choose_virtual_ram_options,
                             "children":  [],
                         },
                         {
                             "label":     "Configuration nvidia",
-                            "info":      lambda: f"Current nvidia status: {configuration_config._config['features']['nvidia']}\n\nPress Enter to configuration nvidia.",
+                            "info":      lambda: f"Current nvidia status: {immutable_os_config._config['features']['nvidia']}\n\nPress Enter to configuration nvidia.",
                             "on_select": nvidia.choose_nvidia_options,
                             "children":  [],
                         },
                         {
                             "label":     "Configuration waydroid",
-                            "info":      lambda: f"Current waydroid status: {configuration_config._config['features']['waydroid']}\n\nPress Enter to configuration nvidia.",
+                            "info":      lambda: f"Current waydroid status: {immutable_os_config._config['features']['waydroid']}\n\nPress Enter to configuration nvidia.",
                             "on_select": waydroid.choose_waydroid_options,
                             "children":  [],
                         },
                         {
                             "label":     "Configuration flatpak",
-                            "info":      lambda: f"Current flatpak status: {configuration_config._config['features']['flatpak']}\n\nPress Enter to configuration nvidia.",
+                            "info":      lambda: f"Current flatpak status: {immutable_os_config._config['features']['flatpak']}\n\nPress Enter to configuration nvidia.",
                             "on_select": flatpak.choose_flatpak_options,
                             "children":  [],
                         },
                         {
                             "label":     "Configuration bluetooth",
-                            "info":      lambda: f"Current bluetooth status: {configuration_config._config['features']['bluetooth']}\n\nPress Enter to configuration bluetooth.",
+                            "info":      lambda: f"Current bluetooth status: {immutable_os_config._config['features']['bluetooth']}\n\nPress Enter to configuration bluetooth.",
                             "on_select": bluetooth.choose_bluetooth_options,
                             "children":  [],
                         },
                         {
                             "label":     "Configuration power management",
-                            "info":      lambda: f"Current power management: {configuration_config._config['features']['power_management']}\n\nPress Enter to configuration power management.",
+                            "info":      lambda: f"Current power management: {immutable_os_config._config['features']['power_management']}\n\nPress Enter to configuration power management.",
                             "on_select": power_management.choose_power_management_options,
                             "children":  [],
                         },

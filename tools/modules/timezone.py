@@ -1,5 +1,5 @@
 import os
-from . import drawer, configuration_config
+from . import drawer, immutable_os_config
 from tools import immutable_installer
 def set_timezone():
     zoneinfo_path = "/usr/share/zoneinfo"
@@ -21,7 +21,7 @@ def set_timezone():
             ])
 
             def select_timezone(a, l):
-                configuration_config._config.update({"timezone": f"{a}/{l}"})
+                immutable_os_config._config["system"].update({"timezone": f"{a}/{l}"})
                 drawer._pop()  # Exit location
                 drawer._pop()  # Exit area
 

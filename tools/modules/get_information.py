@@ -11,38 +11,23 @@ def get_boot_mode_information():
     return boot_mode, boot_filesystem_supported
 
 def get_cpu_information():
-    cpu_result = subprocess.run(["lscpu | grep 'Model name' | cut -d ':' -f2 | xargs"],
-    shell=True,
-    capture_output=True,
-    text=True)
+    cmd = ["lscpu | grep 'Model name' | cut -d ':' -f2 | xargs"]
+    cpu_result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     # Use a strip to remove the \n from the output.
     return cpu_result.stdout.strip()
 
 def get_gpu_information():
-    result = subprocess.run(["lspci | grep -iE 'vga|3d' | awk -F'[][]' '{print $(NF-1)}'"],
-        shell=True,
-        capture_output=True,
-        text=True
-    )
+    cmd = ["lspci | grep -iE 'vga|3d' | awk -F'[][]' '{print $(NF-1)}'"]
+    gpu_result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     # Use splitlines to get list of gpu
-    return result.stdout.splitlines()
+    return gpu_result.stdout.splitlines()
 
 def get_model_information():
-    result = subprocess.run(["cat /sys/class/dmi/id/product_version"],
-    shell=True,
-    capture_output=True,
-    text=True)
-    return result.stdout.strip()
+    cmd = ["cat /sys/class/dmi/id/product_version"]
+    model_result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    return model_result.stdout.strip()
 
 def get_vendor_model_information():
-    result = subprocess.run(["cat /sys/class/dmi/id/sys_vendor"],
-    shell=True,
-    capture_output=True,
-    text=True)
-    return result.stdout.strip()
-# How to use:
-"""
-mode, fs = get_boot_mode()
-print(mode)
-print(fs)
-"""
+    cmd = ["cat /sys/class/dmi/id/sys_vendor"]
+    vendor_model_result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    return vendor_model_result.stdout.strip()

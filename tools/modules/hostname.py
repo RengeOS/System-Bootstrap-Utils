@@ -1,7 +1,7 @@
 import re
 import os
 from rich import print
-from . import configuration_config
+from . import immutable_os_config
 from tools import immutable_installer
 
 def is_valid_hostname(hostname):
@@ -24,13 +24,13 @@ def set_hostname():
     print("-*- Set Hostname -*-\n")
 
     while True:
-        name = input(f"Enter your hostname [{configuration_config._config['hostname']}]: ").strip()
+        name = input(f"Enter your hostname [{immutable_os_config._config["system"]["hostname"]}]: ").strip()
 
         if not name:
             break
 
         if is_valid_hostname(name):
-            configuration_config._config["hostname"] = name
+            immutable_os_config._config["system"]["hostname"] = name
             print("\n[green bold]Hostname has been successfully set![/green bold]")
             os.system("sleep 1")
             break

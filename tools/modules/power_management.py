@@ -1,8 +1,8 @@
-from . import configuration_config
+from . import immutable_os_config
 import os
 
 # List selection for power management
-_power_management_option_list = ["Disabled", "Tuned", "Power profile daemon"]
+_power_management_option_list = ["Disabled", "Tuned", "Power-profiles-daemon"]
 
 
 def choose_power_management_options():
@@ -18,13 +18,13 @@ def choose_power_management_options():
         if choice.isdigit():
             idx = int(choice) - 1
             if 0 <= idx < len(_power_management_option_list):
-                configuration_config._config["features"]["power_management"] = _power_management_option_list[idx]
+                immutable_os_config._config["features"]["power_management"] = _power_management_option_list[idx]
                 break
 
         # Select with text
         for opt in _power_management_option_list:
             if choice == opt.lower():
-                configuration_config._config["features"]["power_management"] = opt
+                immutable_os_config._config["features"]["power_management"] = opt
                 return
 
         print("Invalid choice! Please try again.")

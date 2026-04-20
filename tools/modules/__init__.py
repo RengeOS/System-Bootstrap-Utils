@@ -8,7 +8,7 @@ from . import root_password
 from . import drawer
 from . import user_account
 from . import virtual_ram
-from . import configuration_config
+from . import immutable_os_config
 from . import nvidia
 from . import waydroid
 from . import flatpak

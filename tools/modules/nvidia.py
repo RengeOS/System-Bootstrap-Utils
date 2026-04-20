@@ -1,4 +1,4 @@
-from . import configuration_config
+from . import immutable_os_config
 import os
 
 # List selection for toggle nvidia supported
@@ -18,13 +18,13 @@ def choose_nvidia_options():
         if choice.isdigit():
             idx = int(choice) - 1
             if 0 <= idx < len(_nvidia_option_list):
-                configuration_config._config["features"]["nvidia"] = _nvidia_option_list[idx]
+                immutable_os_config._config["features"]["nvidia"] = _nvidia_option_list[idx]
                 break
 
         # Select with text
         for opt in _nvidia_option_list:
             if choice == opt.lower():
-                configuration_config._config["features"]["nvidia"] = opt
+                immutable_os_config._config["features"]["nvidia"] = opt
                 return
 
         print("Invalid choice! Please try again.")
