@@ -44,9 +44,10 @@ _config = {
         },
     },
 
-    "slot_status": {
-        "slot-a": "Not set",
-        "slot-b": "Not set",
+    "deployment": {
+        "next_slot": "Not set",
+        # How it will look like after configuration:
+        # "next-slot": "slot_a", # or slot_b
     },
 
     "commands_in_chroot": {
@@ -56,9 +57,6 @@ _config = {
     "packages": {
         "list_packages": [],
         "list_aur_packages": [],
-        # Example: 
-        # list_git_packages: [https://github.com/RengeOS/PKGBUILD, "./path to folder contain PKGBUILD file"]
-        "list_git_packages": [],
     },
 
     "services": {

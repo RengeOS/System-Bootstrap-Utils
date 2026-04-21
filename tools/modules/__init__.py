@@ -16,3 +16,7 @@ from . import bluetooth
 from . import power_management
 from . import profile
 from . import audio
+from . import slot_a_b
+from . import chroot
+from . import systemd_service
+from . import arch_package_manager

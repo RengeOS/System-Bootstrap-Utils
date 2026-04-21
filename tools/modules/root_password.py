@@ -4,15 +4,8 @@ from . import immutable_os_config
 
 
 def run_openssl_passwd():
-    # Tell the user what command is about to run
-    print("\nThe system will now run: openssl passwd -6")
-    print("Enter your password when prompted (it will ask twice to confirm).\n")
-
-    # Run openssl passwd -6 and capture its output
-    # capture_output=True means we grab stdout/stderr instead of printing them directly
-    # text=True means the output is returned as a string instead of raw bytes
     result = subprocess.run(
-        ["openssl", "passwd", "-6"],
+        ["openssl", "passwd", "-6"], # For generation hash password
         capture_output=True,
         text=True
     )

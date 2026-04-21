@@ -36,7 +36,7 @@ def get_partitions_list():
     return partitions
 
 
-def configuration_disk():
+def edit_disk():
     os.system("clear")
     print(
         "[yellow]Before editing the hard drive[/yellow], we need to acknowledge that any operation you perform "
@@ -193,77 +193,70 @@ def show_disk_info():
 
     return "\n".join(lines).rstrip()
 
-def choose_efi_partition():
-    _partition_options = get_partitions_list()
+def choose_partition(partition_key, extra_options=[]):
+    _partition_options = extra_options + get_partitions_list()
     os.system("clear")
+
     while True:
         print("\nAvailable partition:")
+        print("0. Back")
         for i, opt in enumerate(_partition_options, 1):
             print(f"{i}. {opt}")
 
         choice = input("\nEnter option (name or number): ").strip().lower()
 
+        # Back
+        if choice == "0":
+            return
+
         # Select with number
         if choice.isdigit():
             idx = int(choice) - 1
             if 0 <= idx < len(_partition_options):
-                immutable_os_config._config["disk"]["layout"]["efi_partition"] = _partition_options[idx]
-                break
+                selected = _partition_options[idx]
+            else:
+                print("Invalid choice! Please try again.")
+                continue
 
         # Select with text
-        for opt in _partition_options:
-            if choice == opt.lower():
-                immutable_os_config._config["disk"]["layout"]["efi_partition"] = opt
-                return
+        else:
+            selected = next((opt for opt in _partition_options if choice == opt.lower()), None)
+            if selected is None:
+                print("Invalid choice! Please try again.")
+                continue
 
-        print("Invalid choice! Please try again.")
+        # Check duplicate
+        if selected not in extra_options:
+            layout = immutable_os_config._config["disk"]["layout"]
+            duplicate_key = next((k for k, v in layout.items() if k != partition_key and v == selected), None)
+            if duplicate_key:
+                print(f"'{selected}' is already used by '{duplicate_key}'! Please try again.")
+                continue
+
+        immutable_os_config._config["disk"]["layout"][partition_key] = selected
+        return
+
+
+def choose_efi_partition():
+    choose_partition("efi_partition")
 
 def choose_data_partition():
-    _partition_options = get_partitions_list()
-    os.system("clear")
-    while True:
-        print("\nAvailable partition:")
-        for i, opt in enumerate(_partition_options, 1):
-            print(f"{i}. {opt}")
-
-        choice = input("\nEnter option (name or number): ").strip().lower()
-
-        # Select with number
-        if choice.isdigit():
-            idx = int(choice) - 1
-            if 0 <= idx < len(_partition_options):
-                immutable_os_config._config["disk"]["layout"]["data_partition"] = _partition_options[idx]
-                break
-
-        # Select with text
-        for opt in _partition_options:
-            if choice == opt.lower():
-                immutable_os_config._config["disk"]["layout"]["data_partition"] = opt
-                return
-
-        print("Invalid choice! Please try again.")
+    choose_partition("data_partition")
 
 def choose_repair_partition():
-    _partition_options = get_partitions_list()
-    os.system("clear")
-    while True:
-        print("\nAvailable partition:")
-        for i, opt in enumerate(_partition_options, 1):
-            print(f"{i}. {opt}")
+    choose_partition("repair_partition")
 
-        choice = input("\nEnter option (name or number): ").strip().lower()
+def choose_boot_a_partition():
+    choose_partition("boot_a_partition")
 
-        # Select with number
-        if choice.isdigit():
-            idx = int(choice) - 1
-            if 0 <= idx < len(_partition_options):
-                immutable_os_config._config["disk"]["layout"]["repair_partition"] = _partition_options[idx]
-                break
+def choose_boot_b_partition():
+    choose_partition("boot_b_partition")
 
-        # Select with text
-        for opt in _partition_options:
-            if choice == opt.lower():
-                immutable_os_config._config["disk"]["layout"]["repair_partition"] = opt
-                return
+def choose_root_a_partition():
+    choose_partition("root_a_partition")
 
-        print("Invalid choice! Please try again.")
+def choose_root_b_partition():
+    choose_partition("root_b_partition")
+
+def choose_swap_partition():
+    choose_partition("swap_partition", extra_options=["Disabled"]) # Add the disabled option to the top of the list

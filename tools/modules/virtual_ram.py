@@ -2,7 +2,7 @@ from . import immutable_os_config
 import os
 
 # List supported virtual ram
-_virtual_ram_list = ["Disabled", "Swap", "Swap-to-file", "Zram"]
+_virtual_ram_list = ["Disabled", "Swap", "Swap_To_File", "Zram"]
 
 
 def choose_virtual_ram_options():

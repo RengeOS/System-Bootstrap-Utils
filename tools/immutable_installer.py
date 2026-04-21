@@ -5,7 +5,8 @@ import subprocess
 from .modules import (
 get_information, drawer, system_locale, hostname, timezone, root_password,
 user_account, virtual_ram, immutable_os_config, nvidia, waydroid,
-flatpak, disk, bluetooth, power_management, profile, audio
+flatpak, disk, bluetooth, power_management, profile, audio,
+slot_a_b, chroot, systemd_service, arch_package_manager
 )
 from rich import print
 from rich.prompt import Prompt, Confirm
@@ -84,61 +85,61 @@ def main():
             "on_select": None,
             "children":  [
                         {
-                            "label":     "Configuration disk",
+                            "label":     "Edit disk",
                             "info":      lambda: f"""Press Enter to configuration disk.
 
                                                   Disk info:
 
                                                   {disk.show_disk_info()}""",
-                            "on_select": disk.configuration_disk,
+                            "on_select": disk.edit_disk,
                             "children":  [],
                         },
                         {
-                            "label":     "EFI partition",
+                            "label":     "Select EFI partition",
                             "info":      lambda: f"Current EFI partition: {immutable_os_config._config["disk"]["layout"]["efi_partition"]}\n\nPress ENTER to change efi partition.",
                             "on_select": disk.choose_efi_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Data partition",
+                            "label":     "Select Data partition",
                             "info":      lambda: f"Current Data partition: {immutable_os_config._config["disk"]["layout"]["data_partition"]}\n\nPress ENTER to change data partition.",
                             "on_select": disk.choose_data_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Repair partition",
+                            "label":     "Select Repair partition",
                             "info":      lambda: f"Current Repair partition: {immutable_os_config._config["disk"]["layout"]["repair_partition"]}\n\nPress ENTER to change repair partition.",
                             "on_select": disk.choose_repair_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Boot_A partition",
+                            "label":     "Select Boot_A partition",
                             "info":      lambda: f"Current Boot_A partition: {immutable_os_config._config["disk"]["layout"]["boot_a_partition"]}\n\nPress ENTER to change boot_a partition.",
-                            "on_select": system_locale.set_locale,
+                            "on_select": disk.choose_boot_a_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Boot_B partition",
+                            "label":     "Select Boot_B partition",
                             "info":      lambda: f"Current Boot_B partition: {immutable_os_config._config["disk"]["layout"]["boot_b_partition"]}\n\nPress ENTER to change boot_b partition.",
-                            "on_select": system_locale.set_locale,
+                            "on_select": disk.choose_boot_b_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Root_A partition",
+                            "label":     "Select Root_A partition",
                             "info":      lambda: f"Current Root_A partition: {immutable_os_config._config["disk"]["layout"]["root_a_partition"]}\n\nPress ENTER to change root_a partition.",
-                            "on_select": system_locale.set_locale,
+                            "on_select": disk.choose_root_a_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Root_B partition",
+                            "label":     "Select Root_B partition",
                             "info":      lambda: f"Current Root_B partition: {immutable_os_config._config["disk"]["layout"]["root_b_partition"]}\n\nPress ENTER to change root_b partition.",
-                            "on_select": system_locale.set_locale,
+                            "on_select": disk.choose_root_b_partition,
                             "children":  [],
                         },
                         {
-                            "label":     "Swap partition",
+                            "label":     "Select Swap partition",
                             "info":      lambda: f"Current Swap partition: {immutable_os_config._config["disk"]["layout"]["swap_partition"]}\n\nPress ENTER to change swap partition.",
-                            "on_select": system_locale.set_locale,
+                            "on_select": disk.choose_swap_partition,
                             "children":  [],
                         },
 
@@ -179,6 +180,40 @@ def main():
             "label":     "Audio",
             "info":      lambda: f"Current audio: {immutable_os_config._config["system"]["audio"]}\n\nPress Enter to change audio.",
             "on_select": audio.choose_audio_options,
+            "children":  [],
+        },
+        {
+            "label":     "Next slot",
+            "info":      lambda: f"""Current next slot: {immutable_os_config._config["deployment"]["next_slot"]}
+                                    
+                                    The next slot is where you define the slot to build from. If you don't have any slots yet, choose Slot A or Slot B to build with and use.
+                                    
+                                    Press Enter to change next slot.""",
+            "on_select": slot_a_b.choose_next_slot_options,
+            "children":  [],
+        },
+        {
+            "label":     "Packages",
+            "info":      lambda: f"""Current packages: {immutable_os_config._config["packages"]["list_packages"]}
+                                     Current AUR packages: {immutable_os_config._config["packages"]["list_aur_packages"]}
+                                     
+                                     Press Enter to edit packages list.""",
+            "on_select": arch_package_manager.edit_packages,
+            "children":  [],
+        },
+        {
+            "label":     "Services",
+            "info":      lambda: f"""Current enabled services: {immutable_os_config._config["services"]["list_enabled_services"]}
+                                     Current disabled services: {immutable_os_config._config["services"]["list_disabled_services"]}
+                                     
+                                     Press Enter to edit commands in chroot.""",
+            "on_select": systemd_service.edit_systemd_services,
+            "children":  [],
+        },
+        {
+            "label":     "Commands in chroot",
+            "info":      lambda: f"Current commands: {immutable_os_config._config["commands_in_chroot"]["list_commands"]}\n\nPress Enter to edit commands in chroot.",
+            "on_select": chroot.edit_commands_in_chroot,
             "children":  [],
         },
         {

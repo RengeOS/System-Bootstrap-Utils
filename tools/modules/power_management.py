@@ -2,7 +2,7 @@ from . import immutable_os_config
 import os
 
 # List selection for power management
-_power_management_option_list = ["Disabled", "Tuned", "Power-profiles-daemon"]
+_power_management_option_list = ["Disabled", "Tuned", "Power_Profiles_Daemon"]
 
 
 def choose_power_management_options():
