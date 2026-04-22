@@ -7,3 +7,4 @@ pyinstaller==6.19.0
 pyinstaller-hooks-contrib==2026.4
 rich==15.0.0
 setuptools==82.0.1
+toml==0.10.2

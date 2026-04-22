@@ -52,6 +52,7 @@ _config = {
 
     "commands_in_chroot": {
         "list_commands": [],
+        "list_executable_scripts": [],
     },
 
     "packages": {

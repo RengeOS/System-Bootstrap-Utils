@@ -6,7 +6,7 @@ from .modules import (
 get_information, drawer, system_locale, hostname, timezone, root_password,
 user_account, virtual_ram, immutable_os_config, nvidia, waydroid,
 flatpak, disk, bluetooth, power_management, profile, audio,
-slot_a_b, chroot, systemd_service, arch_package_manager
+slot_a_b, chroot, systemd_service, arch_package_manager, parse_toml
 )
 from rich import print
 from rich.prompt import Prompt, Confirm
@@ -212,7 +212,7 @@ def main():
         },
         {
             "label":     "Commands in chroot",
-            "info":      lambda: f"Current commands: {immutable_os_config._config["commands_in_chroot"]["list_commands"]}\n\nPress Enter to edit commands in chroot.",
+            "info":      lambda: f"Current commands: {immutable_os_config._config["commands_in_chroot"]["list_commands"]}\nCurrent executeble scripts: {immutable_os_config._config["commands_in_chroot"]["list_executable_scripts"]}\n\nPress Enter to edit commands in chroot.",
             "on_select": chroot.edit_commands_in_chroot,
             "children":  [],
         },
@@ -281,7 +281,7 @@ def main():
         {
             "label":     "Save configuration as TOML file",
             "info":      "Save your configuration as a toml file.",
-            "on_select": run_installer,
+            "on_select": parse_toml.dump_config,
             "children":  [],
         },
         {
