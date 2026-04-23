@@ -1,11 +1,98 @@
 from . import immutable_os_config
 import os
 
-# List selection for power management
-_power_management_option_list = ["Disabled", "Tuned", "Power_Profiles_Daemon"]
+def apply_power_management_options():
+    # Tuned
+    list_tuned_packages = ["tuned", "tuned-ppd"]
+    list_tuned_services = ["tuned", "tuned-ppd"]
 
+    # Power Profiles Daemon
+    list_power_profiles_daemon_packages = ["power-profiles-daemon"]
+    list_power_profiles_daemon_services = ["power-profiles-daemon"]
+
+    option = immutable_os_config._config["features"]["power_management"]
+    match option:
+        case "Tuned":
+            try:
+                # Enabled Tuned
+                for package in list_tuned_packages:
+                    immutable_os_config._config["packages"]["list_packages"].append(package)
+
+                for service in list_tuned_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].append(service)
+
+                # Disabled Power_Profiles_Daemon
+                for package in list_power_profiles_daemon_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+
+                for service in list_power_profiles_daemon_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+
+            except ValueError:
+                pass
+
+        case "Power_Profiles_Daemon":
+            try:
+                # Enabled Power_Profiles_Daemon
+                for package in list_power_profiles_daemon_packages:
+                    immutable_os_config._config["packages"]["list_packages"].append(package)
+                
+                for service in list_power_profiles_daemon_services:    
+                    immutable_os_config._config["services"]["list_enabled_services"].append(service)
+                
+                # Disabled Tuned
+                for package in list_tuned_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+
+                for service in list_tuned_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                
+            except ValueError:
+                pass
+
+        case "Disabled":
+            try:
+                # Disabled Tuned
+                for package in list_tuned_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                
+                for service in list_tuned_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                
+                # Disabled Power_Profiles_Daemon
+                for package in list_power_profiles_daemon_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                
+                for service in list_power_profiles_daemon_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+
+            except ValueError:
+                pass
+
+        case "Not set":
+            try:
+                # Disabled Tuned
+                for package in list_tuned_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                
+                for service in list_tuned_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                
+                # Disabled Power_Profiles_Daemon
+                for package in list_power_profiles_daemon_packages:
+                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                
+                for service in list_power_profiles_daemon_services:
+                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+
+            except ValueError:
+                pass
 
 def choose_power_management_options():
+
+    # List selection for power management
+    _power_management_option_list = ["Disabled", "Tuned", "Power_Profiles_Daemon"]
+
     os.system("clear")
     while True:
         print("\nAvailable options:")
@@ -19,12 +106,14 @@ def choose_power_management_options():
             idx = int(choice) - 1
             if 0 <= idx < len(_power_management_option_list):
                 immutable_os_config._config["features"]["power_management"] = _power_management_option_list[idx]
+                apply_power_management_options()
                 break
 
         # Select with text
         for opt in _power_management_option_list:
             if choice == opt.lower():
                 immutable_os_config._config["features"]["power_management"] = opt
+                apply_power_management_options()
                 return
 
         print("Invalid choice! Please try again.")

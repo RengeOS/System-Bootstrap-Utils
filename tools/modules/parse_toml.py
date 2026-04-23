@@ -5,6 +5,7 @@ import os
 
 path_configuration = [
     "/var/lib/system-bootstrap-utils/configuration.toml",
+    "/tmp/system-bootstrap-utils/configuration.toml",
     # os.path.expanduser("~/.config/system-bootstrap-utils/configuration.toml")
 ]
 

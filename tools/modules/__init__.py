@@ -20,3 +20,4 @@ from . import slot_a_b
 from . import chroot
 from . import systemd_service
 from . import arch_package_manager
+from . import chipset

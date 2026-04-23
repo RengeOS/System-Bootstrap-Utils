@@ -6,7 +6,7 @@ from .modules import (
 get_information, drawer, system_locale, hostname, timezone, root_password,
 user_account, virtual_ram, immutable_os_config, nvidia, waydroid,
 flatpak, disk, bluetooth, power_management, profile, audio,
-slot_a_b, chroot, systemd_service, arch_package_manager, parse_toml
+slot_a_b, chroot, systemd_service, arch_package_manager, parse_toml, chipset
 )
 from rich import print
 from rich.prompt import Prompt, Confirm
@@ -144,6 +144,12 @@ def main():
                         },
 
             ],
+        },
+        {
+            "label":     "Chipset",
+            "info":      lambda: f"Current chipset: {immutable_os_config._config["system"]["chipset"]}\n\nPress ENTER to configuration.",
+            "on_select": chipset.choose_chipset_options,
+            "children":  [],
         },
         {
             "label":     "User account",

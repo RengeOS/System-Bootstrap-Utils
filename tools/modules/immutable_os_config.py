@@ -6,7 +6,8 @@ _config = {
         "timezone": "Not set",
         "system_locale": "Not set",
         "profile": "Not set",
-        "audio": "Not set"
+        "audio": "Not set",
+        "chipset": "Not set"
     },
     "accounts": {
         "root": {
