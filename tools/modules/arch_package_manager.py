@@ -1,6 +1,9 @@
 import os
 from . import immutable_os_config
 
+def mandatory_packages():
+    print("In developing")
+    
 def edit_packages():
     while True:
         os.system("clear")

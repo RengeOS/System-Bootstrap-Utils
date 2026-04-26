@@ -1,5 +1,49 @@
 import os
 from . import immutable_os_config
+from pathlib import Path
+
+def create_temp_user():
+    makepkg_conf = Path("/etc/makepkg.conf")
+ 
+    if not makepkg_conf.exists():
+        print(f"{makepkg_conf} does not exist")
+ 
+    content = makepkg_conf.read_text()
+ 
+    if "PACMAN_AUTH=(sudo)" not in content:
+        with makepkg_conf.open("a") as f:
+            f.write("PACMAN_AUTH=(sudo)\n")
+ 
+    subprocess.run(["sed", "-i", "s/^#PACMAN_OPTS=/PACMAN_OPTS=/", str(makepkg_conf)], check=True)
+ 
+    content = makepkg_conf.read_text()
+    if 'PACMAN_OPTS="--noconfirm"' not in content:
+        with makepkg_conf.open("a") as f:
+            f.write('PACMAN_OPTS="--noconfirm"\n')
+ 
+    result = subprocess.run(["id", "tempuser"], capture_output=True)
+    if result.returncode != 0:
+        subprocess.run(["useradd", "-m", "tempuser"], check=True)
+ 
+    sudoers = Path("/etc/sudoers.d/tempuser")
+    if not sudoers.exists() or "tempuser ALL=(ALL) NOPASSWD: ALL" not in sudoers.read_text():
+        sudoers.write_text("tempuser ALL=(ALL) NOPASSWD: ALL\n")
+
+
+def delete_temp_user():
+    makepkg_conf = Path("/etc/makepkg.conf")
+    if makepkg_conf.exists():
+        content = makepkg_conf.read_text()
+        if "PACMAN_AUTH=(sudo)" in content or "PACMAN_OPTS" in content:
+            subprocess.run(["sed", "-i", "/PACMAN_AUTH=(sudo)/d;/PACMAN_OPTS/d", str(makepkg_conf)], check=True)
+ 
+    if subprocess.run(["id", "tempuser"], capture_output=True).returncode == 0:
+        subprocess.run(["userdel", "-r", "tempuser"], check=True)
+ 
+    sudoers = Path("/etc/sudoers.d/tempuser")
+    if sudoers.exists():
+        subprocess.run(["rm", sudoers], check=True)
+
 
 def edit_commands_in_chroot():
     while True:

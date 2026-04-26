@@ -2,6 +2,11 @@ from . import immutable_os_config
 import os
 
 def apply_power_management_options():
+
+    # Config
+    config_enabled_services = immutable_os_config._config["services"]["list_enabled_services"]
+    config_packages = immutable_os_config._config["packages"]["list_packages"]
+
     # Tuned
     list_tuned_packages = ["tuned", "tuned-ppd"]
     list_tuned_services = ["tuned", "tuned-ppd"]
@@ -16,17 +21,21 @@ def apply_power_management_options():
             try:
                 # Enabled Tuned
                 for package in list_tuned_packages:
-                    immutable_os_config._config["packages"]["list_packages"].append(package)
+                    if package not in config_packages:
+                        config_packages.append(package)
 
                 for service in list_tuned_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].append(service)
+                        if service not in config_enabled_services:
+                            config_enabled_services.append(service)
 
                 # Disabled Power_Profiles_Daemon
                 for package in list_power_profiles_daemon_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                    if package in config_packages:
+                        config_packages.remove(package)
 
                 for service in list_power_profiles_daemon_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                    if service in config_enabled_services:
+                        config_enabled_services.remove(service)
 
             except ValueError:
                 pass
@@ -35,55 +44,44 @@ def apply_power_management_options():
             try:
                 # Enabled Power_Profiles_Daemon
                 for package in list_power_profiles_daemon_packages:
-                    immutable_os_config._config["packages"]["list_packages"].append(package)
+                    if package not in config_packages:
+                        config_packages.append(package)
                 
-                for service in list_power_profiles_daemon_services:    
-                    immutable_os_config._config["services"]["list_enabled_services"].append(service)
+                for service in list_power_profiles_daemon_services:
+                    if service not in config_enabled_services:
+                        config_enabled_services.append(service)
                 
                 # Disabled Tuned
                 for package in list_tuned_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                    if package in config_packages:
+                        config_packages.remove(package)
 
                 for service in list_tuned_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                    if service in config_enabled_services:
+                        config_enabled_services.remove(service)
                 
             except ValueError:
                 pass
 
-        case "Disabled":
+        case "Disabled" | "Not set":
             try:
                 # Disabled Tuned
                 for package in list_tuned_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                    if package in config_packages:
+                        config_packages.remove(package)
                 
                 for service in list_tuned_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                    if service in config_enabled_services:
+                        config_enabled_services.remove(service)
                 
                 # Disabled Power_Profiles_Daemon
                 for package in list_power_profiles_daemon_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                    if package in config_packages:
+                        config_packages.remove(package)
                 
                 for service in list_power_profiles_daemon_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
-
-            except ValueError:
-                pass
-
-        case "Not set":
-            try:
-                # Disabled Tuned
-                for package in list_tuned_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
-                
-                for service in list_tuned_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
-                
-                # Disabled Power_Profiles_Daemon
-                for package in list_power_profiles_daemon_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
-                
-                for service in list_power_profiles_daemon_services:
-                    immutable_os_config._config["services"]["list_enabled_services"].remove(service)
+                    if service in config_enabled_services:
+                        config_enabled_services.remove(service)
 
             except ValueError:
                 pass

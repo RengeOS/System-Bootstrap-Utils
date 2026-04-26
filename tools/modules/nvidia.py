@@ -3,27 +3,25 @@ import os
 
 def apply_nvidia_options():
     list_packages = ["nvidia-open-dkms", "nvidia-utils", "libglvnd", "xf86-video-nouveau"]
+    
+    # Config
+    config_packages = immutable_os_config._config["packages"]["list_packages"]
 
     option = immutable_os_config._config["features"]["nvidia"]
     match option:
         case "Enabled":
             try:
                 for package in list_packages:
-                    immutable_os_config._config["packages"]["list_packages"].append(package)
+                    if package not in config_packages:
+                        config_packages.append(package)
             except ValueError:
                 pass
 
-        case "Disabled":
+        case "Disabled" | "Not set":
             try:
                 for package in list_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
-            except ValueError:
-                pass
-
-        case "Not set":
-            try:
-                for package in list_packages:
-                    immutable_os_config._config["packages"]["list_packages"].remove(package)
+                    if package in config_packages:
+                        config_packages.remove(package)
             except ValueError:
                 pass
     
