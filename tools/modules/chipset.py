@@ -15,11 +15,45 @@ def apply_chipset_options():
                 for package in list_intel_packages:
                     if package not in config_packages:
                         config_packages.append(package)
-
-                for package in list_amd_packages:
+                
+                list_remove_packages = list(set(list_amd_packages) - set(list_intel_packages))
+                for package in list_remove_packages:
                     if package in config_packages:
                         config_packages.remove(package)
 
+            except ValueError:
+                pass
+    
+        case "AMD":
+            try: 
+                for package in list_amd_packages:
+                    if package not in config_packages:
+                        config_packages.append(package)
+                
+                list_remove_packages = list(set(list_intel_packages) - set(list_amd_packages))
+                for package in list_remove_packages:
+                    if package in config_packages:
+                        config_packages.remove(package)
+
+            except ValueError:
+                pass
+
+
+        case "Both":
+            try:
+                for package in list_both_packages:
+                    if package not in config_packages:
+                        config_packages.append(package)
+            
+            except ValueError:
+                pass
+
+        case "Manual" | "Not set":
+            try:
+                for package in list_both_packages:
+                    if package in config_packages:
+                        config_packages.remove(package)
+            
             except ValueError:
                 pass
 
@@ -40,12 +74,14 @@ def choose_chipset_options():
             idx = int(choice) - 1
             if 0 <= idx < len(_chipset_option_list):
                 immutable_os_config._config["system"]["chipset"] = _chipset_option_list[idx]
+                apply_chipset_options()
                 break
 
         # Select with text
         for opt in _chipset_option_list:
             if choice == opt.lower():
                 immutable_os_config._config["system"]["chipset"] = opt
+                apply_chipset_options()
                 return
 
         print("Invalid choice! Please try again.")
